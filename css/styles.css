@@ -340,3 +340,11 @@ em { font-style: italic; color: var(--accent-deep); }
 .footer__ig:hover { color: var(--accent-deep); }
 .footer__ig svg { width: 18px; height: 18px; color: var(--accent-deep); }
 section[id] { scroll-margin-top: 96px; }
+
+/* Banner con foto de producto */
+.hero__photo--producto { width: min(480px, 100%); }
+.hero__photo--producto .arch { aspect-ratio: 1 / 1; border-radius: 28px; background: #f6efe6; }
+.hero__photo--producto img { object-position: 42% 50%; }
+@media (max-width: 860px) { .hero__photo--producto { width: min(400px, 92%); } }
+.hero__photo--producto .ring { display: none; }
+.hero__photo--producto .hero__sign { bottom: -22px; left: 24px; }

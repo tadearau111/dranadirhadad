@@ -26,6 +26,10 @@ window.SITE = {
     boton: "Reservar mi lugar",
     tratamiento: "toxina-botulinica", // a qué tratamiento lleva el banner
     vence: "Viernes 18 de diciembre · Cupos limitados",
+    // Imagen del banner (si se deja vacío, se muestra la foto de la doctora)
+    imagen: "img/xeomin.jpg",
+    imagenTitulo: "Xeomin®",
+    imagenTexto: "Toxina botulínica tipo A",
   },
 
   // Plan destacado en el inicio

@@ -148,11 +148,17 @@
             <div class="hero__actions"><a class="btn" href="#tratamientos">Ver tratamientos</a></div>
           `}
         </div>
+        ${p.activa && p.imagen ? `
+        <div class="hero__photo hero__photo--producto reveal">
+          <span class="ring"></span>
+          <div class="arch"><img src="${esc(p.imagen)}" alt="${esc(p.imagenTitulo || p.titulo)}"></div>
+          ${p.imagenTitulo ? `<div class="hero__sign"><strong>${esc(p.imagenTitulo)}</strong>${esc(p.imagenTexto || "")}</div>` : ""}
+        </div>` : `
         <div class="hero__photo reveal">
           <span class="ring"></span>
           <div class="arch"><img src="${esc(S.sobreMi.foto)}" alt="Dra. Nadir Hadad en su consultorio"></div>
           <div class="hero__sign"><strong>Dra. Nadir Hadad</strong>Medicina estética</div>
-        </div>
+        </div>`}
       </div>`;
 
     const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
