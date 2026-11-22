@@ -62,15 +62,16 @@
   const HOME_TPL = '\n  <section class="section section--soft about-top" id="sobre-mi">\n    <div class="wrap about" id="about"></div>\n  </section>\n\n  <section class="hero" id="hero"></section>\n\n  <section class="section" id="agenda">\n    <div class="wrap">\n      <div class="section__head reveal">\n        <div><span class="eyebrow">Fechas del mes</span><h2 id="agenda-title">Agenda</h2></div>\n        <p>Jornadas especiales y días de atención. Reservá tu lugar con anticipación.</p>\n      </div>\n      <div class="agenda" id="agenda-list"></div>\n    </div>\n  </section>\n\n  <section class="section" id="plan" style="padding-top:0"></section>\n\n  <section class="section section--soft">\n    <div class="wrap">\n      <div class="section__head reveal">\n        <div><span class="eyebrow">Tratamientos</span><h2>Lo que más nos <em>consultan</em></h2></div>\n        <a class="btn btn--ghost" href="#tratamientos">Ver todos</a>\n      </div>\n      <div class="grid-treat" id="featured"></div>\n    </div>\n  </section>\n\n  <section class="section">\n    <div class="wrap showcase">\n      <div class="reveal" id="showcase-slider"></div>\n      <div class="reveal">\n        <span class="eyebrow">Resultados</span>\n        <h2>Antes y <em>después</em></h2>\n        <p>Cada tratamiento tiene su galería de resultados reales, publicados con el consentimiento de cada paciente. Deslizá sobre la imagen para comparar.</p>\n        <a class="btn" href="#tratamientos">Explorar tratamientos</a>\n      </div>\n    </div>\n  </section>\n\n  <section class="section"><div class="wrap" id="contact"></div></section>\n';
   const LIST_TPL = '\n  <section class="page-hero">\n    <div class="wrap">\n      <div class="breadcrumb"><a href="#inicio">Inicio</a> / Tratamientos</div>\n      <span class="eyebrow">Medicina estética</span>\n      <h1>Tratamientos</h1>\n      <p class="lead">Conocé cada tratamiento: en qué consiste, para quién está indicado, sus cuidados y resultados reales.</p>\n    </div>\n  </section>\n  <section class="section" style="padding-top:24px">\n    <div class="wrap"><div class="grid-treat" id="list"></div></div>\n  </section>\n  <section class="section" style="padding-top:0"><div class="wrap" id="contact"></div></section>\n';
 
-  const treatCard = (t, i) => `
+  const treatCard = (t) => `
     <a class="treat-card reveal" href="#${t.slug}">
       <div class="treat-card__top">
         <span class="treat-card__zone">${esc(t.zona)}</span>
-        ${t.imagen ? `<img src="${esc(t.imagen)}" alt="">` : `<span class="treat-card__num">${String(i + 1).padStart(2, "0")}</span>`}
+        ${t.imagen ? `<img src="${esc(t.imagen)}" alt="">` : `<span class="treat-card__num">${esc(t.nombre.charAt(0))}</span>`}
       </div>
       <div class="treat-card__body">
         <h3>${esc(t.nombre)}</h3>
         <p>${esc(t.resumen)}</p>
+        ${t.opciones && t.opciones.length ? `<span class="treat-card__count">${t.opciones.length} ${/protocolo/i.test(t.opcionesTitulo) ? "protocolos" : /zona/i.test(t.opcionesTitulo) ? "zonas" : "opciones"}</span>` : ""}
         <span class="treat-card__more">Ver tratamiento</span>
       </div>
     </a>`;
@@ -246,7 +247,20 @@
   /* ---------- Página: Listado de tratamientos ---------- */
   function renderList() {
     $("#app").innerHTML = LIST_TPL;
-    $("#list").innerHTML = S.tratamientos.map(treatCard).join("");
+    const cats = S.categorias || [...new Set(S.tratamientos.map((t) => t.categoria))];
+    const grupos = cats.map((c) => ({ c, items: S.tratamientos.filter((t) => t.categoria === c) })).filter((g) => g.items.length);
+    $("#list").outerHTML = `
+      <div class="cat-nav" role="navigation" aria-label="Categorías">
+        ${grupos.map((g) => `<button type="button" class="cat-chip" data-cat="${esc(g.c)}">${esc(g.c)} <span>${g.items.length}</span></button>`).join("")}
+      </div>
+      ${grupos.map((g) => `
+        <section class="cat-group" id="cat-${esc(g.c.toLowerCase())}">
+          <h2 class="cat-title">${esc(g.c)}</h2>
+          <div class="grid-treat">${g.items.map(treatCard).join("")}</div>
+        </section>`).join("")}`;
+    document.querySelectorAll(".cat-chip").forEach((b) =>
+      b.addEventListener("click", () => document.getElementById("cat-" + b.dataset.cat.toLowerCase()).scrollIntoView({ behavior: "smooth" }))
+    );
     renderContact($("#contact"));
   }
 
@@ -260,42 +274,45 @@
     }
     document.title = `${t.nombre} · Dra. Nadir Hadad`;
     const casos = t.casos && t.casos.length ? t.casos : null;
+    const datos = Array.isArray(t.datos) ? t.datos : [];
+    const relacionados = S.tratamientos.filter((x) => x.categoria === t.categoria && x.slug !== t.slug).slice(0, 3);
+    const bloque = (titulo, html) => `<div class="detail__block reveal"><h2>${esc(titulo)}</h2>${html}</div>`;
+
     main.innerHTML = `
       <section class="page-hero">
         <div class="wrap">
-          <div class="breadcrumb"><a href="#inicio">Inicio</a> / <a href="#tratamientos">Tratamientos</a> / ${esc(t.nombre)}</div>
+          <div class="breadcrumb"><a href="#inicio">Inicio</a> / <a href="#tratamientos">Tratamientos</a> / ${esc(t.categoria || "")}</div>
           <span class="eyebrow">${esc(t.zona)}</span>
           <h1>${esc(t.nombre)}</h1>
           <p class="lead">${esc(t.resumen)}</p>
-          <div class="facts">
-            <div class="fact"><div class="fact__label">Sesión</div><div class="fact__value">${esc(t.datos.sesion)}</div></div>
-            <div class="fact"><div class="fact__label">Resultados</div><div class="fact__value">${esc(t.datos.resultados)}</div></div>
-            <div class="fact"><div class="fact__label">Duración</div><div class="fact__value">${esc(t.datos.duracion)}</div></div>
-          </div>
+          ${datos.length ? `<div class="facts">${datos.map(([l, v]) => `<div class="fact"><div class="fact__label">${esc(l)}</div><div class="fact__value">${esc(v)}</div></div>`).join("")}</div>` : ""}
         </div>
       </section>
 
       <section class="section" style="padding-top:64px">
         <div class="wrap detail">
           <div>
-            <div class="detail__block reveal">
-              <h2>¿En qué consiste?</h2>
-              ${t.descripcion.map((p) => `<p>${esc(p)}</p>`).join("")}
-            </div>
-            <div class="detail__block reveal">
-              <h2>${esc(t.indicacionesTitulo || "¿Para qué está indicado?")}</h2>
-              <div class="chips">${t.indicaciones.map((i) => `<span class="chip">${esc(i)}</span>`).join("")}</div>
-            </div>
-            <div class="detail__block reveal">
-              <h2>Cuidados posteriores</h2>
-              <ul class="checks">${t.cuidados.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
-            </div>
+            ${bloque("¿En qué consiste?", t.descripcion.map((p) => `<p>${esc(p)}</p>`).join(""))}
+            ${t.opciones && t.opciones.length ? bloque(t.opcionesTitulo || "Opciones", `
+              <div class="options">
+                ${t.opciones.map((o) => `
+                  <${o.enlace ? `a href="#${esc(o.enlace)}"` : "div"} class="option${o.enlace ? " option--link" : ""}">
+                    <h3>${esc(o.nombre)}</h3>
+                    <p>${esc(o.texto)}</p>
+                    ${o.meta && o.meta.length ? `<ul class="option__meta">${o.meta.map((m) => `<li>${esc(m)}</li>`).join("")}</ul>` : ""}
+                  </${o.enlace ? "a" : "div"}>`).join("")}
+              </div>`) : ""}
+            ${t.indicaciones && t.indicaciones.length ? bloque(t.indicacionesTitulo || "¿Para qué está indicado?", `<div class="chips">${t.indicaciones.map((i) => `<span class="chip">${esc(i)}</span>`).join("")}</div>`) : ""}
+            ${(t.extras || []).map((x) => bloque(x.titulo, `
+              ${(x.parrafos || []).map((p) => `<p>${esc(p)}</p>`).join("")}
+              ${x.lista ? `<ul class="checks">${x.lista.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}`)).join("")}
+            ${t.cuidados && t.cuidados.length ? bloque("Cuidados posteriores", `<ul class="checks">${t.cuidados.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`) : ""}
           </div>
           <aside class="aside-card reveal">
             <span class="eyebrow">Reservá tu turno</span>
             <h3>¿Te interesa este tratamiento?</h3>
             <p>Escribime y coordinamos una consulta para evaluar tu caso.</p>
-            <a class="btn" href="${waLink(`¡Hola! Quisiera consultar por ${t.nombre}.`)}" target="_blank" rel="noopener">${ICON.wa}Consultar</a>
+            <a class="btn" href="${waLink(`¡Hola! Quisiera consultar por ${t.nombre}.`)}" target="_blank" rel="noopener">${ICON.wa}${esc(t.cta || "Consultar")}</a>
             <p class="disclaimer">La información es orientativa. La indicación, cantidad de sesiones y resultados dependen de cada paciente y se definen en consulta.</p>
           </aside>
         </div>
@@ -314,7 +331,15 @@
         </div>
       </section>
 
-      <section class="section"><div class="wrap" id="contact"></div></section>`;
+      ${relacionados.length ? `
+      <section class="section">
+        <div class="wrap">
+          <div class="section__head reveal"><div><span class="eyebrow">${esc(t.categoria)}</span><h2>Otros tratamientos</h2></div><a class="btn btn--ghost" href="#tratamientos">Ver todos</a></div>
+          <div class="grid-treat">${relacionados.map(treatCard).join("")}</div>
+        </div>
+      </section>` : ""}
+
+      <section class="section" style="padding-top:0"><div class="wrap" id="contact"></div></section>`;
     renderContact($("#contact"));
   }
 
@@ -322,7 +347,9 @@
   const SECCIONES_INICIO = ["agenda", "sobre-mi", "plan"];
   let vistaActual = null;
   function route() {
-    const h = decodeURIComponent(location.hash.slice(1));
+    const ALIAS = { "acido-hialuronico-labios": "armonizacion-facial", fulloria: "bioestimuladores" };
+    let h = decodeURIComponent(location.hash.slice(1));
+    if (ALIAS[h]) { h = ALIAS[h]; try { history.replaceState(null, "", "#" + h); } catch (e) {} }
     const t = S.tratamientos.find((x) => x.slug === h);
     const vista = t ? "detalle:" + h : h === "tratamientos" ? "tratamientos" : "inicio";
     if (vista !== vistaActual) {
