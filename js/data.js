@@ -65,7 +65,7 @@ window.SITE = {
       "Médica especializada en medicina estética. Mi objetivo es acompañarte con tratamientos que realcen tu belleza natural, siempre con resultados armónicos y cuidando tu salud.",
       "Cada consulta empieza escuchándote: evaluamos qué necesitás y armamos un plan pensado para vos.",
     ],
-    foto: "img/dra-nadir.jpg?v=202611220216",
+    foto: "img/dra-nadir.jpg?v=202611220225",
   },
 
   // Categorías en el orden en que se muestran en la página de Tratamientos
@@ -108,7 +108,11 @@ window.SITE = {
         "Evitar ejercicio intenso, sauna y calor durante 24 horas.",
       ],
       destacado: true,
-      casos: [],
+      casos: [
+        { imagen: "img/casos/toxina-1.jpg", detalle: "Entrecejo, frente y patas de gallo" },
+        { imagen: "img/casos/toxina-2.jpg", detalle: "Arrugas de la frente" },
+        { imagen: "img/casos/toxina-3.jpg", detalle: "Arrugas de la frente" },
+      ],
     },
     {
       slug: "armonizacion-facial",

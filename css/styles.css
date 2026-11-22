@@ -383,3 +383,21 @@ section[id] { scroll-margin-top: 96px; }
 .option--link { transition: transform 0.25s, box-shadow 0.25s; }
 .option--link:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
 .option--link h3::after { content: " →"; color: var(--accent); font-size: 1rem; }
+
+/* ---------- Casos con imagen armada + visor ---------- */
+.case { margin: 0; }
+.case__open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.case__open img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; transition: transform 0.4s; }
+.case__open:hover img { transform: scale(1.02); }
+.showcase .case { max-width: 400px; }
+.lightbox {
+  position: fixed; inset: 0; z-index: 100; background: rgba(30, 28, 30, 0.92);
+  display: grid; place-items: center; cursor: zoom-out;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.lightbox img { max-height: 100%; max-width: 100%; border-radius: 12px; }
+.lightbox__close {
+  position: absolute; top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(14px + env(safe-area-inset-right, 0px));
+  width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--white); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+@media (max-width: 860px) { .showcase .case { max-width: none; } }

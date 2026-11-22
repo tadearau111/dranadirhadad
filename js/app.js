@@ -76,6 +76,29 @@
       </div>
     </a>`;
 
+  // Caso con imagen ya armada (antes arriba / después abajo) o con dos fotos para el comparador
+  const caseView = (c = {}) => c.imagen ? `
+    <figure class="case">
+      <button type="button" class="case__open" data-src="${esc(c.imagen)}" aria-label="Ver imagen en grande">
+        <img src="${esc(c.imagen)}" alt="Antes y después${c.detalle ? ": " + esc(c.detalle) : ""}" loading="lazy">
+      </button>
+      ${c.detalle ? `<figcaption class="ba-caption">${esc(c.detalle)}</figcaption>` : ""}
+    </figure>` : baSlider(c);
+
+  function initLightbox(root = document) {
+    root.querySelectorAll(".case__open").forEach((b) => b.addEventListener("click", () => {
+      const lb = document.createElement("div");
+      lb.className = "lightbox";
+      lb.innerHTML = `<button type="button" class="lightbox__close" aria-label="Cerrar">×</button><img src="${b.dataset.src}" alt="Antes y después">`;
+      const cerrar = () => { lb.remove(); document.removeEventListener("keydown", onKey); };
+      const onKey = (e) => e.key === "Escape" && cerrar();
+      lb.addEventListener("click", cerrar);
+      document.addEventListener("keydown", onKey);
+      document.body.appendChild(lb);
+      lb.querySelector(".lightbox__close").focus();
+    }));
+  }
+
   const baSlider = (c = {}) => `
     <div>
       <div class="ba" style="--pos:50%">
@@ -212,7 +235,7 @@
       .map(treatCard).join("");
 
     const conCaso = S.tratamientos.find((t) => t.casos && t.casos.length);
-    $("#showcase-slider").innerHTML = baSlider(conCaso ? conCaso.casos[0] : { detalle: "Deslizá para comparar" });
+    $("#showcase-slider").innerHTML = caseView(conCaso ? { ...conCaso.casos[0], detalle: conCaso.casos[0].detalle || conCaso.nombre } : { detalle: "Deslizá para comparar" });
 
     const a = S.sobreMi;
     $("#about").innerHTML = `
@@ -325,7 +348,7 @@
             <p>Deslizá sobre cada imagen para comparar.</p>
           </div>
           <div class="gallery">
-            ${casos ? casos.map(baSlider).join("") : baSlider({ detalle: "Próximamente: fotos de pacientes" })}
+            ${casos ? casos.map(caseView).join("") : baSlider({ detalle: "Próximamente: fotos de pacientes" })}
           </div>
           <p class="ba-note">Fotos publicadas con consentimiento de cada paciente. Los resultados pueden variar.</p>
         </div>
@@ -359,6 +382,7 @@
       else if (h === "tratamientos") renderList();
       else renderHome();
       initSliders($("#app"));
+      initLightbox($("#app"));
       initReveal();
       document.querySelectorAll(".nav a").forEach((a) => {
         const target = a.getAttribute("href");
