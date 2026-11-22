@@ -65,7 +65,7 @@ window.SITE = {
       "Médica especializada en medicina estética. Mi objetivo es acompañarte con tratamientos que realcen tu belleza natural, siempre con resultados armónicos y cuidando tu salud.",
       "Cada consulta empieza escuchándote: evaluamos qué necesitás y armamos un plan pensado para vos.",
     ],
-    foto: "img/dra-nadir.jpg?v=202611220209",
+    foto: "img/dra-nadir.jpg?v=202611220210",
   },
 
   tratamientos: [
