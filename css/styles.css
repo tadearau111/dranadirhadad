@@ -352,6 +352,6 @@ section[id] { scroll-margin-top: 96px; }
 @media (max-width: 860px) { .about-top { padding-block: 36px 56px; } }
 /* Sobre mí arriba: foto vertical completa */
 .about-top .about { grid-template-columns: minmax(0, 400px) 1fr; }
-.about-top .about__photo { aspect-ratio: 1125 / 1800; max-width: 400px; width: 100%; }
+.about-top .about__photo { aspect-ratio: 1125 / 2000; max-width: 400px; width: 100%; }
 .about-top .about__photo img { object-position: 50% 100%; }
 @media (max-width: 860px) { .about-top .about { grid-template-columns: 1fr; } .about-top .about__photo { max-width: 340px; margin-inline: auto; } }
