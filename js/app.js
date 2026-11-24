@@ -72,7 +72,7 @@
     <a class="treat-card reveal" href="#${t.slug}">
       <div class="treat-card__top">
         <span class="treat-card__zone">${esc(t.zona)}</span>
-        ${t.imagen ? `<img src="${esc(t.imagen)}" alt="">` : `<span class="treat-card__num">${esc(t.nombre.charAt(0))}</span>`}
+        ${t.imagen ? `<img src="${esc(t.imagen)}" alt="">` : (window.ilustracion && window.ilustracion(t.slug)) || `<span class="treat-card__num">${esc(t.nombre.charAt(0))}</span>`}
       </div>
       <div class="treat-card__body">
         <h3>${esc(t.nombre)}</h3>
@@ -312,7 +312,8 @@
 
     main.innerHTML = `
       <section class="page-hero">
-        <div class="wrap">
+        <div class="wrap page-hero__wrap">
+          ${window.ilustracion && window.ilustracion(t.slug) ? `<div class="page-hero__ilus">${window.ilustracion(t.slug)}</div>` : ""}
           <div class="breadcrumb"><a href="#inicio">Inicio</a> / <a href="#tratamientos">Tratamientos</a> / ${esc(t.categoria || "")}</div>
           <span class="eyebrow">${esc(t.zona)}</span>
           <h1>${esc(t.nombre)}</h1>

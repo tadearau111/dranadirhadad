@@ -408,3 +408,16 @@ section[id] { scroll-margin-top: 96px; }
 .contact-list a:hover span { color: var(--accent-deep); }
 .footer__ig + .footer__ig { margin-left: -8px; }
 @media (max-width: 520px) { .cta__actions .btn { width: 100%; justify-content: center; } }
+
+/* ---------- Ilustraciones de tratamientos ---------- */
+.treat-card__top .ilus { width: 78%; height: 86%; margin-top: 8%; transition: transform 0.5s ease; }
+.treat-card:hover .ilus { transform: scale(1.04); }
+.page-hero__wrap { position: relative; }
+.page-hero__ilus { position: absolute; right: 0; top: 0; width: 300px; pointer-events: none; }
+.page-hero__ilus .ilus { width: 100%; height: auto; }
+.page-hero__wrap > :not(.page-hero__ilus) { position: relative; }
+.page-hero .lead { max-width: min(620px, calc(100% - 320px)); }
+@media (max-width: 860px) {
+  .page-hero__ilus { display: none; }
+  .page-hero .lead { max-width: none; }
+}
