@@ -16,6 +16,11 @@
     return n ? `https://wa.me/${n}?text=${t}` : `https://wa.me/?text=${t}`;
   };
 
+  const mapsLink = () => {
+    const q = S.contacto.mapa || S.contacto.direccion || "";
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}`;
+  };
+
   /* ---------- Header, footer y botón flotante (comunes) ---------- */
   function renderChrome(active) {
     const header = $("#header");
@@ -48,6 +53,7 @@
         <div class="wrap footer__inner">
           <img src="img/logo.png" alt="Dra. Nadir Hadad">
           ${S.contacto.instagram ? `<a class="footer__ig" href="https://instagram.com/${esc(S.contacto.instagram)}" target="_blank" rel="noopener">${ICON.ig}@${esc(S.contacto.instagram)}</a>` : ""}
+          ${S.contacto.direccion ? `<a class="footer__ig" href="${mapsLink()}" target="_blank" rel="noopener">${ICON.pin}Cómo llegar</a>` : ""}
           <small>© ${new Date().getFullYear()} Dra. Nadir Hadad · Medicina estética</small>
         </div>`;
     }
@@ -258,9 +264,12 @@
         <span class="eyebrow">Tu primera consulta</span>
         <h2>Contame qué te gustaría <em>mejorar</em></h2>
         <p>Escribime por WhatsApp y armamos juntos el plan ideal para vos.</p>
-        <a class="btn" href="${waLink()}" target="_blank" rel="noopener">${ICON.wa}Escribir por WhatsApp</a>
+        <div class="cta__actions">
+          <a class="btn" href="${waLink()}" target="_blank" rel="noopener">${ICON.wa}Escribir por WhatsApp</a>
+          ${c.direccion ? `<a class="btn btn--ghost" href="${mapsLink()}" target="_blank" rel="noopener">${ICON.pin}Cómo llegar</a>` : ""}
+        </div>
         <div class="contact-list">
-          ${c.direccion ? `<span>${ICON.pin}${esc(c.direccion)}</span>` : ""}
+          ${c.direccion ? `<a href="${mapsLink()}" target="_blank" rel="noopener"><span>${ICON.pin}${esc(c.direccion)}</span></a>` : ""}
           ${c.horarios ? `<span>${ICON.clock}${esc(c.horarios)}</span>` : ""}
           ${c.instagram ? `<a href="https://instagram.com/${esc(c.instagram)}" target="_blank" rel="noopener"><span>${ICON.ig}@${esc(c.instagram)}</span></a>` : ""}
         </div>

@@ -401,3 +401,10 @@ section[id] { scroll-margin-top: 96px; }
   width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--white); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer;
 }
 @media (max-width: 860px) { .showcase .case { max-width: none; } }
+
+/* ---------- Botón Cómo llegar ---------- */
+.cta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.btn--ghost svg { width: 18px; height: 18px; }
+.contact-list a:hover span { color: var(--accent-deep); }
+.footer__ig + .footer__ig { margin-left: -8px; }
+@media (max-width: 520px) { .cta__actions .btn { width: 100%; justify-content: center; } }

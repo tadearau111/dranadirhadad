@@ -11,6 +11,8 @@ window.SITE = {
     whatsapp: "5493424637076",
     instagram: "dranadirhadad",
     direccion: "Urquiza 3668 · Santa Fe",
+    // Lo que se busca en Google Maps para el botón "Cómo llegar"
+    mapa: "Urquiza 3668, Santa Fe, Argentina",
     horarios: "",             // Ej: "Lunes a viernes · 10 a 19 h"
   },
 
@@ -65,7 +67,7 @@ window.SITE = {
       "Médica especializada en medicina estética. Mi objetivo es acompañarte con tratamientos que realcen tu belleza natural, siempre con resultados armónicos y cuidando tu salud.",
       "Cada consulta empieza escuchándote: evaluamos qué necesitás y armamos un plan pensado para vos.",
     ],
-    foto: "img/dra-nadir.jpg?v=202611220225",
+    foto: "img/dra-nadir.jpg?v=202611241830",
   },
 
   // Categorías en el orden en que se muestran en la página de Tratamientos
